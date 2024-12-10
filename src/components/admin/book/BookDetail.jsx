@@ -1,6 +1,6 @@
 import { Badge, Descriptions, Divider, Drawer, Upload, Image } from "antd";
 import { formatDate } from "../../../services/formatDate";
-import { getBase64 } from "../../../services/getBase64";
+import { getImageBase64 } from "../../../services/getBase64";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from 'uuid';
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
@@ -9,14 +9,7 @@ const BookDetail = (props) => {
     const { isModalOpen, setIsModalOpen, dataViewDetail, setDataViewDetail } = props;
     const [previewOpen, setPreviewOpen] = useState(false);
     const [previewImage, setPreviewImage] = useState('');
-    const [fileList, setFileList] = useState([
-        {
-            uid: '-1',
-            name: 'image.png',
-            status: 'done',
-            url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-        }
-    ]);
+    const [fileList, setFileList] = useState([]);
 
     useEffect(() => {
         if (dataViewDetail) {
@@ -46,7 +39,7 @@ const BookDetail = (props) => {
 
     const handlePreview = async (file) => {
         if (!file.url && !file.preview) {
-            file.preview = await getBase64(file.originFileObj);
+            file.preview = await getImageBase64(file.originFileObj);
         }
         setPreviewImage(file.url || file.preview);
         setPreviewOpen(true);

@@ -14,6 +14,7 @@ import { formatDate } from '../../../services/formatDate';
 import InputSearch from './InputSearch';
 import ModalCreateBook from './ModalCreateBook';
 import BookDetail from './BookDetail';
+import ModalEditBook from './ModalEditBook';
 
 const BookTable = () => {
     const [listBook, setListBook] = useState([]);
@@ -23,7 +24,7 @@ const BookTable = () => {
     const [totalData, setTotalData] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [isModalOpen, setIsModalOpen] = useState('');
-    const [dataViewDetail, setDataViewDetail] = useState([]);
+    const [dataViewDetail, setDataViewDetail] = useState(null);
 
     // Fetch books with pagination
     const fetchListBook = useCallback(async () => {
@@ -31,15 +32,22 @@ const BookTable = () => {
         try {
             let query = `current=${currentPage}&pageSize=${pageSize}`;
             if (searchQuery) {
-                query += searchQuery;
+                query += `&${searchQuery}`;
             }
+
             const res = await getBookWithPaginate(query);
-            if (res?.data) {
-                setListBook(res.data.result || []);
-                setTotalData(res.data.meta?.total || 0);
+
+            if (res?.data?.result) {
+                setListBook(res.data.result);
+            } else {
+                setListBook([]);
+                message.warning('Không có dữ liệu sách để hiển thị.');
             }
+
+            setTotalData(res?.data?.meta?.total || 0);
         } catch (error) {
-            message.error('Failed to fetch book data.');
+            const errorMessage = error?.response?.data?.message || error.message || 'Có lỗi xảy ra khi lấy dữ liệu sách.';
+            message.error(errorMessage);
         } finally {
             setIsLoading(false);
         }
@@ -51,20 +59,29 @@ const BookTable = () => {
 
     // Handlers
     const handleDeleteBook = async (id) => {
-        // Placeholder for delete logic
-        const res = await deleteBook(id);
-        if (res)
-            message.success(`Book with ID: ${id} deleted.`);
-        else
+        try {
+            const res = await deleteBook(id);
+            if (res && res.data)
+                message.success(`Book with ID: ${id} deleted.`);
+            else
+                notification.error({
+                    message: 'Có lỗi xảy ra',
+                    description: res.message,
+                });
+        } catch (error) {
             notification.error({
                 message: 'Có lỗi xảy ra',
-                description: res.message,
+                description: error.message || error.response?.data?.message,
             });
+        } finally {
+            fetchListBook();
+        }
     };
 
     const handleEditBook = (record) => {
         // Placeholder for edit logic
-        console.log('Editing book:', record);
+        setDataViewDetail(record);
+        setIsModalOpen('edit');
     };
 
     const handleExportFile = () => {
@@ -80,7 +97,6 @@ const BookTable = () => {
     const handleViewBookDetail = (record) => {
         setIsModalOpen('bookDetail');
         setDataViewDetail(record);
-        console.log(record);
     }
 
     const searchFilter = (query) => {
@@ -198,6 +214,16 @@ const BookTable = () => {
                 <ModalCreateBook
                     isModalOpen={isModalOpen}
                     setIsModalOpen={setIsModalOpen}
+                    fetchListBook={fetchListBook}
+                />
+            )}
+            {isModalOpen === 'edit' && (
+                <ModalEditBook
+                    isModalOpen={isModalOpen}
+                    setIsModalOpen={setIsModalOpen}
+                    dataViewDetail={dataViewDetail}
+                    setDataViewDetail={setDataViewDetail}
+                    fetchListBook={fetchListBook}
                 />
             )}
             <Table
@@ -216,7 +242,7 @@ const BookTable = () => {
                         setPageSize(size);
                         setCurrentPage(current);
                     },
-                    position: ['bottomCenter'],
+                    showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
                 }}
             />
         </>

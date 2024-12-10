@@ -1,5 +1,8 @@
 * {
     box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+        'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
+        'Noto Color Emoji';
 }
 
 .header-container {
@@ -13,6 +16,7 @@
         align-items: center;
         width: 80%;
         margin: 20px 0px;
+        padding: 0 0 0 3rem;
 
         .header-top__logo {
             display: flex;
@@ -22,6 +26,16 @@
             font-size: 60px;
             color: rgb(0, 126, 253);
             margin-right: 50px;
+
+            .header-logo {
+                cursor: pointer;
+                color: rgb(11, 116, 229);
+
+                &:hover {
+                    animation: spin 1s linear infinite;
+                    -webkit-animation: spin 4s infinite linear;
+                }
+            }
         }
 
         .header-top__search {
@@ -63,6 +77,7 @@
             margin-left: auto;
             margin-right: 50px;
 
+
             .header-top__account {
                 display: flex;
                 align-items: center;
@@ -85,12 +100,112 @@
         height: 30px;
         align-items: center;
         justify-content: space-between;
-        padding-right: 50px;
+        padding: 0 3rem 1rem 3rem;
 
         .header-bottom__commit {
             display: flex;
             align-items: center;
             gap: 10px;
+        }
+    }
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media screen and (max-width: 1025px) and (min-width: 800px) {
+    .header-container {
+        font-size: x-small;
+
+        .header-top {
+            width: 100%;
+        }
+
+        .header-bottom {
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 1440px) and (min-width: 1024px) {
+    .header-container {
+        font-size: medium;
+
+        .header-top {
+            width: 100%;
+        }
+
+        .header-bottom {
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 800px) and (min-width: 601px) {
+    .header-container {
+        font-size: x-small;
+
+        .header-top {
+            width: 100%;
+        }
+
+        .header-bottom {
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (max-width: 426px) and (min-width: 319px) {
+    .header-container {
+        font-size: normal;
+
+        .header-top {
+            width: 100%;
+
+            .header-top__logo {
+                display: none;
+            }
+
+            .header-top__search {
+                .header-top__search-button {
+                    display: none;
+                }
+            }
+
+            .header-top__right {
+                .header-top__account {
+                    display: none;
+                }
+
+                .header-top__cart {
+                    display: flex;
+                    align-items: center;
+                    float: right;
+                    height: 50%;
+                }
+            }
+        }
+
+        .header-bottom {
+            width: 100%;
+            display: none;
         }
     }
 }

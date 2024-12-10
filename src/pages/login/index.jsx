@@ -5,6 +5,9 @@ import { callLogin } from '../../services/api';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { doLoginAction } from '../../redux/account/accountSlice';
+import { FacebookOutlined, GoogleOutlined } from '@ant-design/icons';
+import { getAdditionalUserInfo, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth } from '../../../firebaseConfig';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -30,6 +33,20 @@ const LoginPage = () => {
             });
         }
     };
+
+    const handleLogin3rdParty = (type) => {
+        if (type === 'google') {
+            const provider = new GoogleAuthProvider();
+            signInWithPopup(auth, provider)
+                .then((result) => {
+                    const credential = GoogleAuthProvider.credentialFromResult(result);
+                    const token = credential.accessToken;
+                    const user = result.user;
+                }).catch((error) => {
+                    console.log('Have error', error.message);
+                });
+        }
+    }
 
     return (
         <>
@@ -67,11 +84,19 @@ const LoginPage = () => {
                                 <Form.Item
                                 // wrapperCol={{ offset: 6, span: 16 }}
                                 >
-                                    <Button type="primary" htmlType="submit" loading={isSubmit}>
+                                    <Button type="primary" htmlType="submit" loading={isSubmit} size='large' style={{ width: '123.28px' }}>
                                         Đăng nhập
                                     </Button>
                                 </Form.Item>
-                                <Divider>Or</Divider>
+                                <Divider style={{ color: 'lightgray' }}>HOẶC</Divider>
+                                {/* <div className='login-3rd-party' style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                    <Button type="primary" icon={<FacebookOutlined />} size='large' onClick={() => handleLogin3rdParty('facebook')}>
+                                        Facebook
+                                    </Button>
+                                    <Button type="primary" icon={<GoogleOutlined />} size='large' style={{ width: '123.28px' }} onClick={() => handleLogin3rdParty('google')}>
+                                        Google
+                                    </Button>
+                                </div> */}
                                 <p className="text text-normal">Chưa có tài khoản ?
                                     <span>
                                         <Link to='/register' > Đăng Ký </Link>
@@ -79,7 +104,7 @@ const LoginPage = () => {
                                 </p>
                                 <br />
                                 <p className="text" style={{ color: "#9d9d9d" }}>
-                                    p/s: Để test, sử dụng tài khoản guest@gmail.com/123456
+                                    p/s: Để test, sử dụng tài khoản admin@gmail.com/password: 123456
                                 </p>
                             </Form>
                         </section>

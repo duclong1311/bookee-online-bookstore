@@ -82,7 +82,7 @@ const RegisterPage = () => {
                                         Đăng ký
                                     </Button>
                                 </Form.Item>
-                                <Divider>Or</Divider>
+                                <Divider style={{ color: 'lightgray' }}>HOẶC</Divider>
                                 <p className="text text-normal">Đã có tài khoản?
                                     <span>
                                         <Link to='/login' > Đăng Nhập </Link>

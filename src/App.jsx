@@ -11,7 +11,7 @@ import BookPage from './pages/book';
 import RegisterPage from './pages/register';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAccount } from './services/api';
-import { doLoginAction } from './redux/account/accountSlice';
+import { doGetAccountAction, doLoginAction } from './redux/account/accountSlice';
 import LoadingPage from './pages/loading';
 import ErrorPage from './pages/error';
 import AdminPage from './pages/admin';
@@ -20,10 +20,14 @@ import LayoutAdmin from './LayoutAdmin';
 import ManageUserPage from './pages/admin/user';
 import MangeBookPage from './pages/admin/book';
 import MangeOrderPage from './pages/admin/order';
+import './styles/global.scss';
+import OrderHistory from './components/order/OrderHistory';
+import MangeOrder from './components/admin/order/ManageOrder';
 
 export default function App() {
   const dispatch = useDispatch();
   const isLoading = useSelector(state => state.account.isLoading);
+
 
   useEffect(() => {
     const getAccountData = async () => {
@@ -31,9 +35,10 @@ export default function App() {
         return;
       const res = await getAccount();
       if (res && res.data) {
-        dispatch(doLoginAction(res.data));
+        dispatch(doGetAccountAction(res.data));
       }
     }
+
     getAccountData();
   }, []);
 
@@ -49,8 +54,22 @@ export default function App() {
           element: <ContactPage />,
         },
         {
-          path: "book",
+          path: "book/:slug",
           element: <BookPage />,
+        },
+        {
+          path: "order",
+          element:
+            <PrivateRoute>
+              <MangeOrderPage />
+            </PrivateRoute>
+        },
+        {
+          path: "order-history",
+          element:
+            <PrivateRoute>
+              <OrderHistory />
+            </PrivateRoute>
         },
       ],
     },
@@ -71,7 +90,7 @@ export default function App() {
           element:
             <PrivateRoute>
               <AdminPage />
-            </PrivateRoute>,
+            </PrivateRoute>
         },
         {
           path: "user",
@@ -79,7 +98,6 @@ export default function App() {
             <PrivateRoute>
               <ManageUserPage />
             </PrivateRoute>
-          ,
         },
         {
           path: "book",
@@ -93,7 +111,7 @@ export default function App() {
           path: "order",
           element:
             <PrivateRoute>
-              <MangeOrderPage />
+              <MangeOrder />
             </PrivateRoute>
           ,
         }
@@ -112,7 +130,11 @@ export default function App() {
 
   return (
     <>
-      {isLoading === false || window.location.pathname === '/login' || window.location.pathname === '/register'
+      {isLoading === false
+        || window.location.pathname === '/login'
+        || window.location.pathname === '/register'
+        || window.location.pathname.startsWith('/book')
+        || window.location.pathname === '/'
         ?
         <RouterProvider router={router} />
         :

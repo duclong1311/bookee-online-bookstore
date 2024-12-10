@@ -4,9 +4,8 @@ const Footer = () => {
     return (
         <>
             <footer>
-                <div>React tiki-bookstore clone &copy;{new Date().getFullYear} by Tran Duc Long</div>
+                <div>React tiki-bookstore clone &copy; 2024 by Tran Duc Long</div>
             </footer>
-
         </>
     )
 }

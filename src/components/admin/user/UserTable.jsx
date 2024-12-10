@@ -269,7 +269,7 @@ const UserTable = () => {
                         showSizeChanger: true,
                         total: totalData,
                         onShowSizeChange: onSizeChange,
-                        position: ['bottomCenter'],
+                        showTotal: (total, range) => { return (<div> {range[0]}-{range[1]} trên {total} rows</div>) }
                     }
                 }
             />
