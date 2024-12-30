@@ -45,7 +45,7 @@ const LayoutAdmin = () => {
 
     const [collapsed, setCollapsed] = useState(false);
     const [activeMenu, setActiveMenu] = useState('dashboard');
-    const [pageUrl, setPageUrl] = useState('Dash Board');
+    const [pageUrl, setPageUrl] = useState('dashboard');
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const {

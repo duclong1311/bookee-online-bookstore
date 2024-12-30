@@ -43,8 +43,6 @@ const Header = (props) => {
         }
     }
 
-    console.log(userInfo);
-
     let items = [
         {
             key: 'adminPage',
@@ -81,9 +79,9 @@ const Header = (props) => {
                     </div>
                     <div className="header-top__search">
                         <SlMagnifier style={{ color: '#ccc', paddingRight: '5px', fontSize: '24px' }} />
-                        <input type="text" class="header-top__search-input" placeholder="Giá siêu rẻ" onChange={(e) => props.setSearchTerm(e.target.value)} />
+                        <input type="text" className="header-top__search-input" placeholder="Giá siêu rẻ" onChange={(e) => props.setSearchTerm(e.target.value)} />
                         <Divider type="vertical" />
-                        <button class="header-top__search-button">Tìm kiếm</button>
+                        <button className="header-top__search-button">Tìm kiếm</button>
                     </div>
                     <div className='header-top__right'>
                         <div className="header-top__account" style={{ cursor: 'pointer' }}>

@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { doDeleteBookAction, doUpdateCartAction } from "../../redux/order/orderSlice";
 import { useState } from "react";
 import { totalPrice } from "../../services/totalPrice";
+import { useNavigate } from "react-router";
 const baseUrl = import.meta.env.VITE_BACKEND_URL;
 
 const ViewOrder = (props) => {
@@ -12,6 +13,7 @@ const ViewOrder = (props) => {
 
     const dispatch = useDispatch();
     const carts = useSelector((state) => state.order.carts);
+    const navigate = useNavigate();
 
     const handleOnChangeInput = (value, book) => {
         if (!value || value < 1) return;
@@ -80,12 +82,20 @@ const ViewOrder = (props) => {
                                 </span>
                             </div>
                             <Divider style={{ margin: "10px 0" }} />
-                            <button
-                                onClick={() => setCurrentStep(1)}
-                                disabled={carts?.length === 0 ? true : false}
-                            >
-                                Mua Hàng
-                            </button>
+                            {carts?.length === 0 ?
+                                <button
+                                    onClick={() => navigate('/')}
+                                >
+                                    Tiếp tục mua sắm
+                                </button>
+                                :
+                                <button
+                                    onClick={() => setCurrentStep(1)}
+                                >
+                                    Mua Hàng
+                                </button>
+                            }
+
                         </div>
                     </Col>
                 </Row>

@@ -90,7 +90,7 @@ export default function App() {
           element:
             <PrivateRoute>
               <AdminPage />
-            </PrivateRoute>,
+            </PrivateRoute>
         },
         {
           path: "user",
@@ -98,7 +98,6 @@ export default function App() {
             <PrivateRoute>
               <ManageUserPage />
             </PrivateRoute>
-          ,
         },
         {
           path: "book",

@@ -26,7 +26,6 @@ export const orderSlice = createSlice({
 
             state.carts = orders;
 
-            console.log('check orders', state.carts);
             message.success("Sản phẩm đã được thêm vào Giỏ hàng");
         },
         doUpdateCartAction: (state, action) => {
